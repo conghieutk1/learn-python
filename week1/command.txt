@@ -1,0 +1,5 @@
+python rename-files.py "D:\Workspace\DevOps\Python\week1\demo" --ext "jpg,png,txt" --sort ctime --start 1 --step 1 --prefix "PRE_" --suffix "_SFX" --template "{prefix}{num:03d}_{stem}{suffix}{ext}"
+
+python rename-files.py "D:\Workspace\DevOps\Python\week1\demo" --ext "jpg,png,txt" --sort ctime --start 1 --step 1 --prefix "PRE_" --suffix "_SFX" --find "file" --repl "test"
+
+python rename-files.py "D:\Workspace\DevOps\Python\week1\demo" --log "rename_02112025_215804.csv" --undo

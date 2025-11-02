@@ -30,6 +30,8 @@ def sort_files(files, key):
         return sorted(files, key=lambda p: p.name.lower())
     if key=="mtime":
         return sorted(files, key=lambda p: p.stat().st_mtime)
+    if key=="ctime":
+        return sorted(files, key=lambda p: p.stat().st_ctime)
     return list(files)
 
 def build_new_name(p: Path, num, args):
@@ -109,13 +111,15 @@ def undo_from_log(logfile: Path, dry_run: bool):
             newp.rename(target)
 
 def main():
+    default_log = f"rename_{datetime.now().strftime('%d%m%Y_%H%M%S')}.csv"
+
     ap = argparse.ArgumentParser(
         description="Bulk rename files an toàn (dry-run mặc định)."
     )
     ap.add_argument("path", help="Thư mục chứa file")
     ap.add_argument("--recursive", action="store_true", help="Duyệt đệ quy")
     ap.add_argument("--ext", help="Lọc theo đuôi, ví dụ: jpg,png,txt")
-    ap.add_argument("--sort", choices=["none","name","mtime"], default="name",
+    ap.add_argument("--sort", choices=["none","name","mtime", "ctime"], default="ctime",
                     help="Thứ tự xử lý (ảnh hưởng đánh số).")
     ap.add_argument("--start", type=int, default=1, help="Số bắt đầu cho {num}")
     ap.add_argument("--step", type=int, default=1, help="Bước tăng số")
@@ -131,7 +135,7 @@ def main():
                             "hoặc '{date:%Y%m%d}-{stem}{ext}'"))
 
     ap.add_argument("--apply", action="store_true", help="Thực thi (mặc định chỉ dry-run)")
-    ap.add_argument("--log", default=".rename_log.csv", help="Đường dẫn file log để undo")
+    ap.add_argument("--log", default=default_log, help="Đường dẫn file log để undo")
     ap.add_argument("--undo", action="store_true", help="Hoàn tác theo log")
     args = ap.parse_args()
 
